@@ -50,7 +50,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                   return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
                 },
                 onLoadStop: (controller,url)async{
-                  var result = await controller.injectJavascriptFileFromAsset(assetFilePath: "assets/index.js");
+                  var result = await controller.injectJavascriptFileFromAsset(assetFilePath: "package:fluttercrisp/assets/index.js");
                 },
                 onWebViewCreated: (controller){
                   controller.addJavaScriptHandler(handlerName: 'UploadInfo', callback: (args) async {
