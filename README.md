@@ -48,7 +48,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //web can be acquired from the script tag provided by crisp also website is subjective , you can use a blank page you hosted personally , or any website that either isnt a big platform like twitter or facebook , or a blank index.html file you hosted personally
+      //webid can be acquired from the script tag provided by crisp 
+      //website is subjective , you can use a blank page you hosted personally , or any website that isnt a big platform like twitter or facebook , or a website that already has crisp hosted on it like "crisp.chat"
       home:  ChatWidget(website: "https://merchant.getgift.me/",backgroundColor: Colors.blue,webid: "1fe61c88-a23f-40f2-aa2b-1e4a554edcde",onLoad: (){
         print("loaded");
       },onAgentMessage: (){
