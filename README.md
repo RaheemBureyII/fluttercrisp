@@ -19,7 +19,7 @@ defaultConfig {
 ```
 
 ## Installation
-
+Add to pubspec.yaml file
 ```dart
  fluttercrisp:
     git:
