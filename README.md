@@ -3,7 +3,8 @@
 FlutterCrisp is a flutter package that wraps the crisp websdk in flutter which exposes most methods in flutter.
 ## Android Setup
 FlutterCrisp requires a minSdkVersion to 17
-'''bash
+```dart
+
 defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.testfluttercrisp"
@@ -15,16 +16,16 @@ defaultConfig {
         versionName flutterVersionName
     }
  
-'''
+```
 
 ## Installation
 
-'''dart
+```dart
  fluttercrisp:
     git:
       url: https://github.com/RaheemBureyII/fluttercrisp.git
       ref: de52f5348ff7878ec6677d37e1949256e1623005 # branch name
-'''
+```
 
 ## Usage
 
