@@ -30,7 +30,7 @@ Add to pubspec.yaml file
 ## Usage
 
 ```dart
-//webid is the only required parameter which is can found in the script tag youre provided in crisp in the html section
+
 import 'package:flutter/material.dart';
 import 'package:fluttercrisp/fluttercrisp.dart';
 void main()async {
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      
+      //web can be acquired from the script tag provided by crisp also website is subjective , you can use a blank page you hosted personally , or any website that either isnt a big platform like twitter or facebook , or a blank index.html file you hosted personally
       home:  ChatWidget(website: "https://merchant.getgift.me/",backgroundColor: Colors.blue,webid: "1fe61c88-a23f-40f2-aa2b-1e4a554edcde",onLoad: (){
         print("loaded");
       },onAgentMessage: (){
