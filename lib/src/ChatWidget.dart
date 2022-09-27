@@ -49,6 +49,60 @@ class _ChatWidgetState extends State<ChatWidget> {
                 androidOnPermissionRequest: (controller, origin, resources) async {
                   return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
                 },
+                onLoadStart: (controller,url)async{
+                  final String functionBody1 = """
+                  const style = document.createElement('style');
+
+                  style.textContent = `
+                                      button.bg-transparent.spinner {
+                      border-color: rgba(228, 228, 231, 1);
+                  }
+                  .spinner {
+                      position: relative;
+                      color: transparent !important;
+                      pointer-events: none;
+                      height: 100vh;
+                    width: 100%;
+                  }
+                  
+                  .spinner:after {
+                      content: '';
+                      z-index: 3;
+                      position: absolute !important;
+                      top: calc(50% - (1em / 2));
+                      left: calc(50% - (1em / 2));
+                      display: block;
+                      width: 7em;
+                      height: 7em;
+                      border: 20px solid #ff2c324a;
+                      border-radius: 9999px;
+                      border-right-color: transparent;
+                      border-top-color: transparent;
+                      animation: spinAround 500ms infinite linear;
+                  }
+                  
+                  @keyframes spinAround {
+                      from {
+                          transform: rotate(0deg);
+                      }
+                      to {
+                          transform: rotate(360deg);
+                      }
+                  }
+                  html, body {
+                    height: 100%;
+                  }
+                  body {
+                    display: flex;
+                  }
+                  `;
+                  
+                  document.head.appendChild(style);
+                   document.body.innerHTML='<div class="spinner" style></div>';
+                  """;
+                  var result = await controller.callAsyncJavaScript(
+                      functionBody: functionBody1);
+                },
                 onLoadStop: (controller,url)async{
                   final String functionBody = """
                 var jsondata;
