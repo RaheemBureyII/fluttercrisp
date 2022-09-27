@@ -60,11 +60,30 @@ class MyApp extends StatelessWidget {
 }
 
 ```
-## Parameters
-### webid 
- 
+## Attributes
+### Webid 
+Webid can be acquired from the style tag provided by crisp. To find the style tag Login to crisp > Settings > Website Settings > integrations > Html > then copy the string from "CRISP_WEBSITE_ID".
 
-## Contributing
+### Website
+This basically injects your crisp package on another site , so just pick your personal website or maybe host your own blank html page with a loading spinner on it. Once the site chosen isnt a large scale website like twitter or instagram and it also isnt a website with the crisp chat or any other chat on it you should be good.
+
+### Name
+Adds name of crisp visitor
+
+### Company
+Adds company of crisp visitor
+
+### Email
+Adds email of crisp visitor
+
+### onAgentMessage
+Callback for when an agent messages you
+
+### onLoad
+Callback for when the CrispChat is finish loading.
+
+ 
+ ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
