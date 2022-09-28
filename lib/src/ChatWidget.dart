@@ -130,7 +130,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                        window.CRISP_READY_TRIGGER =function(){
                        //alert("yurr");
                           if(\$crisp.is("chat:opened")===true){
-                           alert("yurr1");
                           \$crisp.push(["set", "user:email", [jsondata.email]]);
                           \$crisp.push(["set", "user:nickname", [jsondata.name]]);
                           \$crisp.push(["set", "user:company", [jsondata.company]]);
