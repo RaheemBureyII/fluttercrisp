@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ChatWidget extends StatefulWidget {
-  ChatWidget({Key? key, this.backgroundColor, this.name, this.company, this.email, required this.webid,this.onLoad, this.onAgentMessage,required this.website}) : super(key: key);
+  ChatWidget({Key? key, this.backgroundColor, this.name, this.company, this.email, required this.webid,this.onLoad, this.onAgentMessage,this.sessiondata,required this.website}) : super(key: key);
   final  backgroundColor;
   final name;
   final company;
   final email;
   final webid;
   final website;
+  final Map<String,dynamic>? sessiondata;
   final Function? onLoad;
   final Function? onAgentMessage;
   @override
@@ -45,7 +46,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                       //allowsInlineMediaPlayback: true,
                     )
                 ),
-                initialUrlRequest: URLRequest(url: Uri.parse(widget.website)),
+                initialUrlRequest: URLRequest(url: Uri.parse(widget?.website)),
                 androidOnPermissionRequest: (controller, origin, resources) async {
                   return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
                 },
@@ -99,17 +100,12 @@ class _ChatWidgetState extends State<ChatWidget> {
                   
                   document.head.appendChild(style);
                    document.body.innerHTML='<div class="spinner" style></div>';
-                  """;
-                  var result = await controller.callAsyncJavaScript(
-                      functionBody: functionBody1);
-                },
-                onLoadStop: (controller,url)async{
-                  final String functionBody = """
-                var jsondata;
+                    var jsondata;
                       var webid;
+                      
                       window.addEventListener("flutterInAppWebViewPlatformReady",  function(event) {
                        const args = ["we in there like swimwear"];
-                       window.flutter_inappwebview.callHandler('myHandlerName', ...args).then(function(result) {
+                       window.flutter_inappwebview.callHandler('UploadInfo', ...args).then(function(result) {
                                      jsondata=JSON.parse(result);
                                       webid=jsondata.webid;
                                    });;
@@ -132,35 +128,40 @@ class _ChatWidgetState extends State<ChatWidget> {
                        window.\$crisp=[];window.CRISP_WEBSITE_ID="1fe61c88-a23f-40f2-aa2b-1e4a554edcde";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
                       }
                        window.CRISP_READY_TRIGGER =function(){
+                       //alert("yurr");
                           if(\$crisp.is("chat:opened")===true){
+                           alert("yurr1");
                           \$crisp.push(["set", "user:email", [jsondata.email]]);
                           \$crisp.push(["set", "user:nickname", [jsondata.name]]);
                           \$crisp.push(["set", "user:company", [jsondata.company]]);
+                          \$crisp.push(["set", "session:data", [Object.entries(jsondata.session_data)]]);
                           \$crisp.push(["on", "message:received", onagenmessage])
                           }
                        }
-                       loadup();
+                       setTimeout(loadup,1200);
+                       //loadup();
                        //window.\$crisp=[];window.CRISP_WEBSITE_ID="1fe61c88-a23f-40f2-aa2b-1e4a554edcde";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
-                      //document.onreadystatechange = () => {
+                      // document.onreadystatechange = () => {
                       //  if (document.readyState === 'complete') {
                       //    setTimeout(loadup,200);
                       //    //window.\$crisp=[];window.CRISP_WEBSITE_ID=jsondata.webid;(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
                       //
                       //  }
-                      //};
-
+                      // };
 
                   """;
                   var result = await controller.callAsyncJavaScript(
-                      functionBody: functionBody);
+                      functionBody: functionBody1);
                 },
                 onWebViewCreated: (controller){
                   controller.addJavaScriptHandler(handlerName: 'UploadInfo', callback: (args) async {
+                    print("in there");
                     Map<String,dynamic> data={
                       "company":widget.company,
                       "webid":widget.webid,
                       "name":widget.name,
-                      "email":widget.email
+                      "email":widget.email,
+                      "session_data":widget.sessiondata
                     };
                     final json = jsonEncode(data);
                     return json;
