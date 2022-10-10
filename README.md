@@ -76,6 +76,9 @@ Adds company of crisp visitor
 ### Email
 Adds email of crisp visitor
 
+### Phone
+Adds phone of crisp visitor
+
 ### onAgentMessage
 Callback for when an agent messages you
 
