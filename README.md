@@ -76,11 +76,17 @@ Adds company of crisp visitor
 ### Email
 Adds email of crisp visitor
 
+### Phone
+Adds phone number of crisp visitor
+
 ### onAgentMessage
 Callback for when an agent messages you
 
 ### onLoad
 Callback for when the CrispChat is finish loading.
+
+### session_data
+Pushes session data
 
  
  ## Contributing
