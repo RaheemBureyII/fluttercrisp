@@ -115,6 +115,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                     },
                     onWebViewCreated: (controller){
                       controller.addJavaScriptHandler(handlerName: 'UploadInfo', callback: (args) async {
+                        headlessInAppWebView.dispose();
                         print("in there");
                         Map<String,dynamic> data={
                           "company":widget.company,
