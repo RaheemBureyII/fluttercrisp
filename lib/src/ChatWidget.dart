@@ -42,6 +42,7 @@ class _ChatWidgetState extends State<ChatWidget> {
             //allowsInlineMediaPlayback: true,
           )
       ),
+
       initialUrlRequest: URLRequest(url: Uri.parse(widget?.website)),
       androidOnPermissionRequest: (controller, origin, resources) async {
         return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
@@ -69,7 +70,7 @@ class _ChatWidgetState extends State<ChatWidget> {
           widget.onLoad?.call();
         });
         controller.addJavaScriptHandler(handlerName: 'onAgentMessage', callback: (args) async {
-          widget.onAgentMessage?.call();
+          widget.onAgentMessage?.call(args[0]);
         });
       },
     );
@@ -89,10 +90,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                   InAppWebView(
                     initialOptions: InAppWebViewGroupOptions(
                         crossPlatform: InAppWebViewOptions(
-                            preferredContentMode: UserPreferredContentMode.MOBILE,
-                            mediaPlaybackRequiresUserGesture: false,
-                            disableHorizontalScroll: true,
-                            disableVerticalScroll: true
+                          preferredContentMode: UserPreferredContentMode.MOBILE,
+                          mediaPlaybackRequiresUserGesture: false,
+                          disableHorizontalScroll: true,
 
                         ),
                         android: AndroidInAppWebViewOptions(
@@ -115,7 +115,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                     },
                     onWebViewCreated: (controller){
                       controller.addJavaScriptHandler(handlerName: 'UploadInfo', callback: (args) async {
-                        headlessInAppWebView.dispose();
                         print("in there");
                         Map<String,dynamic> data={
                           "company":widget.company,
@@ -155,13 +154,16 @@ String function ="""
                   const style = document.createElement('style');
 
                   style.textContent = `
-                                      button.bg-transparent.spinner {
+                  button.bg-transparent.spinner {
                       border-color: rgba(228, 228, 231, 1);
                   }
                   .spinner {
                       position: relative;
                       color: transparent !important;
                       pointer-events: none;
+                       display:flex;
+                      justify-content:center;
+                      align-items:center;
                       height: 100vh;
                     width: 100%;
                   }
@@ -169,13 +171,9 @@ String function ="""
                   .spinner:after {
                       content: '';
                       z-index: 3;
-                      position: absolute !important;
-                      top: calc(50% - (1em / 2));
-                      left: calc(50% - (1em / 2));
-                      display: block;
-                      width: 7em;
-                      height: 7em;
-                      border: 20px solid #ff2c324a;
+                      width: 4em;
+                      height: 4em;
+                      border: 10px solid #0096FF;
                       border-radius: 9999px;
                       border-right-color: transparent;
                       border-top-color: transparent;
