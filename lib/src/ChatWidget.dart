@@ -130,14 +130,18 @@ class _ChatWidgetState extends State<ChatWidget> {
                       controller.addJavaScriptHandler(handlerName: 'onLoad', callback: (args) async {
                         widget.onLoad?.call();
                       });
+                      controller.addJavaScriptHandler(handlerName: 'onAgentMessage', callback: (args) async {
+                        widget.onAgentMessage?.call(args[0]);
+                      });
                     },
                   ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children:[ IconButton(onPressed: (){
 
-                        Get.back();
+
                         headlessInAppWebView.run();
+                        Get.back();
                         //changestate(false);
                       }
                           , icon: Icon(Icons.close_outlined,color: Theme.of(context).primaryColor,size: MediaQuery.of(context).size.width*0.06,))])
@@ -213,6 +217,7 @@ String function ="""
                         cross_origin_cookies : true
                       };
                       function onagenmessage(message){
+                      alert("Works");
                       const args = [message.content];
                           window.flutter_inappwebview.callHandler('onAgentMessage',...args);
                       }
