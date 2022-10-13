@@ -109,11 +109,13 @@ class _ChatWidgetState extends State<ChatWidget> {
                       return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
                     },
                     onLoadStart: (controller,url)async{
+                      headlessInAppWebView.dispose();
                       final String functionBody1 = function;
                       var result = await controller.callAsyncJavaScript(
                           functionBody: functionBody1);
                     },
                     onWebViewCreated: (controller){
+
                       controller.addJavaScriptHandler(handlerName: 'UploadInfo', callback: (args) async {
                         print("in there");
                         Map<String,dynamic> data={
@@ -129,9 +131,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                       });
                       controller.addJavaScriptHandler(handlerName: 'onLoad', callback: (args) async {
                         widget.onLoad?.call();
-                      });
-                      controller.addJavaScriptHandler(handlerName: 'onAgentMessage', callback: (args) async {
-                        widget.onAgentMessage?.call(args[0]);
                       });
                     },
                   ),
@@ -217,7 +216,6 @@ String function ="""
                         cross_origin_cookies : true
                       };
                       function onagenmessage(message){
-                      alert("Works");
                       const args = [message.content];
                           window.flutter_inappwebview.callHandler('onAgentMessage',...args);
                       }
@@ -230,6 +228,7 @@ String function ="""
                       onstart();
                        window.\$crisp=[];window.CRISP_WEBSITE_ID="1fe61c88-a23f-40f2-aa2b-1e4a554edcde";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
                       }
+                      
                        window.CRISP_READY_TRIGGER =function(){
                        //alert("yurr");
                           if(\$crisp.is("chat:opened")===true){
@@ -237,7 +236,7 @@ String function ="""
                           \$crisp.push(["set", "user:nickname", [jsondata.name]]);
                           \$crisp.push(["set", "user:phone", [jsondata.phone]]);
                           \$crisp.push(["set", "user:company", [jsondata.company]]);
-                          \$crisp.push(["set", "session:data", [Object.entries(jsondata.session_data)]]);
+                          \$crisp.push(["set", "session:data", [jsondata.session_data!=undefined?Object.entries(jsondata.session_data):[]]]);
                           \$crisp.push(["on", "message:received", onagenmessage])
                           }
                        }
