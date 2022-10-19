@@ -22,15 +22,16 @@ class ChatWidget extends StatefulWidget {
 
 class _ChatWidgetState extends State<ChatWidget> {
   late HeadlessInAppWebView headlessInAppWebView;
+  late int index;
   @override
   void initState(){
+    index=0;
     headlessInAppWebView=HeadlessInAppWebView(
       initialOptions: InAppWebViewGroupOptions(
           crossPlatform: InAppWebViewOptions(
-              preferredContentMode: UserPreferredContentMode.MOBILE,
-              mediaPlaybackRequiresUserGesture: false,
-              disableHorizontalScroll: true,
-              disableVerticalScroll: true
+            preferredContentMode: UserPreferredContentMode.MOBILE,
+            mediaPlaybackRequiresUserGesture: false,
+            disableHorizontalScroll: true,
 
           ),
           android: AndroidInAppWebViewOptions(
@@ -42,19 +43,22 @@ class _ChatWidgetState extends State<ChatWidget> {
             //allowsInlineMediaPlayback: true,
           )
       ),
-
       initialUrlRequest: URLRequest(url: Uri.parse(widget?.website)),
       androidOnPermissionRequest: (controller, origin, resources) async {
         return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
       },
-      onLoadStart: (controller,url)async{
+      onLoadStop: (controller,url)async{
+        //zheadlessInAppWebView.dispose();
         final String functionBody1 = function;
         var result = await controller.callAsyncJavaScript(
-            functionBody: functionBody1);
+            functionBody: function);
+
       },
-      onWebViewCreated: (controller){
+      onWebViewCreated: (controller)async{
+
         controller.addJavaScriptHandler(handlerName: 'UploadInfo', callback: (args) async {
           print("in there");
+
           Map<String,dynamic> data={
             "company":widget.company,
             "webid":widget.webid,
@@ -73,6 +77,7 @@ class _ChatWidgetState extends State<ChatWidget> {
           widget.onAgentMessage?.call(args[0]);
         });
       },
+
     );
     super.initState();
   }
@@ -87,6 +92,7 @@ class _ChatWidgetState extends State<ChatWidget> {
               width: MediaQuery.of(context).size.width>559?559:double.infinity,
               child: Stack(
                 children: [
+
                   InAppWebView(
                     initialOptions: InAppWebViewGroupOptions(
                         crossPlatform: InAppWebViewOptions(
@@ -108,16 +114,18 @@ class _ChatWidgetState extends State<ChatWidget> {
                     androidOnPermissionRequest: (controller, origin, resources) async {
                       return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
                     },
-                    onLoadStart: (controller,url)async{
-                      headlessInAppWebView.dispose();
+                    onLoadStop: (controller,url)async{
+                      //zheadlessInAppWebView.dispose();
                       final String functionBody1 = function;
                       var result = await controller.callAsyncJavaScript(
-                          functionBody: functionBody1);
+                          functionBody: function);
+
                     },
-                    onWebViewCreated: (controller){
+                    onWebViewCreated: (controller)async{
 
                       controller.addJavaScriptHandler(handlerName: 'UploadInfo', callback: (args) async {
                         print("in there");
+
                         Map<String,dynamic> data={
                           "company":widget.company,
                           "webid":widget.webid,
@@ -130,15 +138,17 @@ class _ChatWidgetState extends State<ChatWidget> {
                         return json;
                       });
                       controller.addJavaScriptHandler(handlerName: 'onLoad', callback: (args) async {
+                        setState(() {
+                          index=1;
+                        });
                         widget.onLoad?.call();
                       });
                     },
                   ),
+                  index!=1?Container(width:double.infinity,height:double.infinity,color:Colors.white,child: Center(child: CircularProgressIndicator(),),):Container(),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children:[ IconButton(onPressed: (){
-
-
                         headlessInAppWebView.run();
                         Get.back();
                         //changestate(false);
@@ -154,63 +164,19 @@ class _ChatWidgetState extends State<ChatWidget> {
 }
 
 String function ="""
-                  const style = document.createElement('style');
 
-                  style.textContent = `
-                  button.bg-transparent.spinner {
-                      border-color: rgba(228, 228, 231, 1);
-                  }
-                  .spinner {
-                      position: relative;
-                      color: transparent !important;
-                      pointer-events: none;
-                       display:flex;
-                      justify-content:center;
-                      align-items:center;
-                      height: 100vh;
-                    width: 100%;
-                  }
-                  
-                  .spinner:after {
-                      content: '';
-                      z-index: 3;
-                      width: 4em;
-                      height: 4em;
-                      border: 10px solid #0096FF;
-                      border-radius: 9999px;
-                      border-right-color: transparent;
-                      border-top-color: transparent;
-                      animation: spinAround 500ms infinite linear;
-                  }
-                  
-                  @keyframes spinAround {
-                      from {
-                          transform: rotate(0deg);
-                      }
-                      to {
-                          transform: rotate(360deg);
-                      }
-                  }
-                  html, body {
-                    height: 100%;
-                  }
-                  body {
-                    display: flex;
-                  }
-                  `;
-                  
-                  document.head.appendChild(style);
-                   document.body.innerHTML='<div class="spinner" style></div>';
+                   document.body.innerHTML='<div></div>';
                     var jsondata;
                       var webid;
-                      
-                      window.addEventListener("flutterInAppWebViewPlatformReady",  function(event) {
+                       
+                     
                        const args = ["we in there like swimwear"];
                        window.flutter_inappwebview.callHandler('UploadInfo', ...args).then(function(result) {
                                      jsondata=JSON.parse(result);
                                       webid=jsondata.webid;
                                    });;
-                      });
+                      
+          
                       window.CRISP_RUNTIME_CONFIG = {
                         lock_maximized       : true,
                         cross_origin_cookies : true
@@ -221,16 +187,17 @@ String function ="""
                       }
                       function onstart(){
                       const args = ["started"];
-                          window.flutter_inappwebview.callHandler('onstart',...args);
+                          window.flutter_inappwebview.callHandler('onLoad',...args);
                       }
                       
                       function loadup(){
-                      onstart();
+                      //onstart();
+                      
                        window.\$crisp=[];window.CRISP_WEBSITE_ID="1fe61c88-a23f-40f2-aa2b-1e4a554edcde";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
                       }
                       
                        window.CRISP_READY_TRIGGER =function(){
-                       //alert("yurr");
+                       
                           if(\$crisp.is("chat:opened")===true){
                           \$crisp.push(["set", "user:email", [jsondata.email]]);
                           \$crisp.push(["set", "user:nickname", [jsondata.name]]);
@@ -238,9 +205,10 @@ String function ="""
                           \$crisp.push(["set", "user:company", [jsondata.company]]);
                           \$crisp.push(["set", "session:data", [jsondata.session_data!=undefined?Object.entries(jsondata.session_data):[]]]);
                           \$crisp.push(["on", "message:received", onagenmessage])
+                          onstart();
                           }
                        }
-                       setTimeout(loadup,1200);
+                       loadup();
                        //loadup();
                        //window.\$crisp=[];window.CRISP_WEBSITE_ID="1fe61c88-a23f-40f2-aa2b-1e4a554edcde";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
                       // document.onreadystatechange = () => {
@@ -250,5 +218,8 @@ String function ="""
                       //
                       //  }
                       // };
+                  
+                  
 
                   """;
+
