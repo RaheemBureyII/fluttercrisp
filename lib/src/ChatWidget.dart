@@ -48,8 +48,7 @@ class _ChatWidgetState extends State<ChatWidget> {
         return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
       },
       onLoadStop: (controller,url)async{
-        //zheadlessInAppWebView.dispose();
-        final String functionBody1 = function;
+
         var result = await controller.callAsyncJavaScript(
             functionBody: function);
 
@@ -115,7 +114,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                       return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
                     },
                     onLoadStop: (controller,url)async{
-                      //zheadlessInAppWebView.dispose();
+                      headlessInAppWebView.dispose();
                       final String functionBody1 = function;
                       var result = await controller.callAsyncJavaScript(
                           functionBody: function);
@@ -174,6 +173,7 @@ String function ="""
                        window.flutter_inappwebview.callHandler('UploadInfo', ...args).then(function(result) {
                                      jsondata=JSON.parse(result);
                                       webid=jsondata.webid;
+                                      loadup();
                                    });;
                       
           
@@ -193,7 +193,7 @@ String function ="""
                       function loadup(){
                       //onstart();
                       
-                       window.\$crisp=[];window.CRISP_WEBSITE_ID="1fe61c88-a23f-40f2-aa2b-1e4a554edcde";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
+                       window.\$crisp=[];window.CRISP_WEBSITE_ID=webid;(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
                       }
                       
                        window.CRISP_READY_TRIGGER =function(){
@@ -208,7 +208,7 @@ String function ="""
                           onstart();
                           }
                        }
-                       loadup();
+                       
                        //loadup();
                        //window.\$crisp=[];window.CRISP_WEBSITE_ID="1fe61c88-a23f-40f2-aa2b-1e4a554edcde";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
                       // document.onreadystatechange = () => {
