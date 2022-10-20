@@ -5,8 +5,9 @@ import 'package:get/get.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ChatWidget extends StatefulWidget {
-  ChatWidget({Key? key, this.backgroundColor,this.phone, this.name, this.company, this.email, required this.webid,this.onLoad, this.onAgentMessage,this.sessiondata,required this.website}) : super(key: key);
+  ChatWidget({Key? key, this.backgroundColor=Colors.white,this.phone, this.name, this.company, this.email, required this.webid,this.onLoad, this.onAgentMessage,this.sessiondata,required this.website, this.closebuttoncolor=Colors.white}) : super(key: key);
   final  backgroundColor;
+  final  closebuttoncolor;
   final name;
   final company;
   final phone;
@@ -152,7 +153,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                         Get.back();
                         //changestate(false);
                       }
-                          , icon: Icon(Icons.close_outlined,color: Theme.of(context).primaryColor,size: MediaQuery.of(context).size.width*0.06,))])
+                          , icon: Icon(Icons.close_outlined,color: widget.closebuttoncolor,size: MediaQuery.of(context).size.width*0.06,))])
                 ],
               ),
             ),
